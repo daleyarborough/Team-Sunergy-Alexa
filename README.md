@@ -1,3 +1,3 @@
 # Team-Sunergy
 
-# Alexa Voice Service Application #
+$ Alexa Voice Service Application 
