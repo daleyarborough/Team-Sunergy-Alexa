@@ -1,24 +1,5 @@
-/**
- Copyright 2014-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-
- Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
-
- http://aws.amazon.com/apache2.0/
-
- or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
- */
-
-/**
- * This sample shows how to create a simple Trivia skill with a multiple choice format. The skill
- * supports 1 player at a time, and does not support games across sessions.
- */
-
 'use strict';
 
-/**
- * When editing your questions pay attention to your punctuation. Make sure you use question marks or periods.
- * Make sure the first answer is the correct one. Set at least 4 answers, any extras will be shuffled in.
- */
 var questions = [
     {
         "What is the name of Appalachian State University's solar car?": [
@@ -29,7 +10,7 @@ var questions = [
         ]
     },
     {
-        "What year did Appalachian begin the solar car team?": [
+        "What year did Appalachian create the solar car team?": [
             "2014",
             "2000",
             "2011",
@@ -91,11 +72,6 @@ var questions = [
 exports.handler = function (event, context) {
     try {
         console.log("event.session.application.applicationId=" + event.session.application.applicationId);
-
-        /**
-         * Uncomment this if statement and populate with your skill's application ID to
-         * prevent someone else from configuring a skill that sends requests to this function.
-         */
 
 //     if (event.session.application.applicationId !== "amzn1.echo-sdk-ams.app.05aecccb3-1461-48fb-a008-822ddrt6b516") {
 //         context.fail("Invalid Application ID");
@@ -203,11 +179,11 @@ function onSessionEnded(sessionEndedRequest, session) {
     // Add any cleanup logic here
 }
 
-// ------- Skill specific business logic -------
+// ------- specific business logic -------
 
-var ANSWER_COUNT = 4;
-var GAME_LENGTH = 5;
-var CARD_TITLE = "fun trivia game"; // Be sure to change this for your skill.
+var ANSWER_COUNT = 7;
+var GAME_LENGTH = 8;
+var CARD_TITLE = "fun trivia game"; 
 
 function getWelcomeResponse(callback) {
     var sessionAttributes = {},
@@ -256,7 +232,6 @@ function populateGameQuestions() {
         indexList.push(i);
     }
 
-    // Pick GAME_LENGTH random questions from the list to ask the user, make sure there are no repeats.
     for (var j = 0; j < GAME_LENGTH; j++){
         var rand = Math.floor(Math.random() * index);
         index -= 1;
@@ -315,7 +290,7 @@ function handleAnswerRequest(intent, session, callback) {
         // If the user responded with an answer but there is no game in progress, ask the user
         // if they want to start a new game. Set a flag to track that we've prompted the user.
         sessionAttributes.userPromptedToContinue = true;
-        speechOutput = "There is no game in progress. Do you want to start a new game? ";
+        speechOutput = "There is no questionnaire in progress. Do you want to start a new questionnaire? ";
         callback(sessionAttributes,
             buildSpeechletResponse(CARD_TITLE, speechOutput, speechOutput, false));
     } else if (!answerSlotValid && !userGaveUp) {
@@ -343,7 +318,7 @@ function handleAnswerRequest(intent, session, callback) {
             }
             speechOutputAnalysis += "The correct answer is " + correctAnswerIndex + ": " + correctAnswerText + ". ";
         }
-        // if currentQuestionIndex is 4, we've reached 5 questions (zero-indexed) and can exit the game session
+        // if currentQuestionIndex is 7, we've reached 8 questions (zero-indexed) and can exit the game session
         if (currentQuestionIndex == GAME_LENGTH - 1) {
             speechOutput = userGaveUp ? "" : "That answer is ";
             speechOutput += speechOutputAnalysis + "You got " + currentScore.toString() + " out of "
@@ -396,10 +371,8 @@ function handleGetHelpRequest(intent, session, callback) {
     // Provide a help prompt for the user, explaining how the game is played. Then, continue the game
     // if there is one in progress, or provide the option to start another one.
 
-    // Set a flag to track that we're in the Help state.
+    // Set a flag (boolean) to track that we're in the Help state.
     session.attributes.userPromptedToContinue = true;
-
-    // Do not edit the help dialogue. This has been created by the Alexa team to demonstrate best practices.
 
     var speechOutput = "I will ask you " + GAME_LENGTH + " multiple choice questions. Respond with the number of the answer. "
         + "For example, say one, two, three, or four. To start a new game at any time, say, start game. "
@@ -413,7 +386,6 @@ function handleGetHelpRequest(intent, session, callback) {
 }
 
 function handleFinishSessionRequest(intent, session, callback) {
-    // End the session with a "Good bye!" if the user wants to quit the game
     callback(session.attributes,
         buildSpeechletResponseWithoutCard("Good bye!", "", true));
 }
