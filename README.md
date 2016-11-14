@@ -1,3 +1,7 @@
-                #Team-Sunergy
-
-       Alexa Voice Service Application 
+```javascript
+function fancyAlert(arg) {
+  if(arg) {
+    $.facebox({div:'#foo'})
+  }
+}
+```
