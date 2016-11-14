@@ -1,7 +1,1 @@
-```javascript
-function fancyAlert(arg) {
-  if(arg) {
-    $.facebox({div:'#foo'})
-  }
-}
-```
+#Alexa voice service for Appalachian State University's Solar Car Team
